@@ -20,5 +20,16 @@ Route::get('/about', function(){
 });
 
 
+Route::get('/admin', function(){
+    if(!auth()->check()) {
+        return redirect()->to('/login');
+    }
+    return view('dashboard');
+});
+
+
 Route::get('/login','UserController@showLoginForm')->name('login');
 Route::post('/login','UserController@doLoginProcess');
+
+
+Route::get('/admin/dorm', 'DormController@index');

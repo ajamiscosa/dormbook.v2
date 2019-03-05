@@ -98,7 +98,7 @@ class DormController extends Controller
         $temp = explode('-',$Dorm);
         $dorm = new Dorm();
         $dorm = $dorm->where('ID','=',$temp[0])->first();
-        return view('dorms.show', ['data'=>$dorm]);
+        return view('viewdorm', ['data'=>$dorm]);
     }
 
     /**

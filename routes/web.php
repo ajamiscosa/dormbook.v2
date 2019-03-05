@@ -33,3 +33,11 @@ Route::post('/login','UserController@doLoginProcess');
 
 
 Route::get('/admin/dorm', 'DormController@index');
+
+
+Route::get('/search','DormController@showSearchForm');
+Route::post('/search','DormController@doSearchProcess');
+
+Route::get('/view/{id}','DormController@showDormInformation');
+
+Route::post('/dorm/review/store', 'RatingController@store');

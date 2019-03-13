@@ -1,26 +1,15 @@
 @extends('app')
 @section('content')
-
-    <!-- PAGE TITLE SECTION -->
-    <section class="clearfix pageTitleSection" style="background-image: url();">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="pageTitle">
-                        <h2>"We've Found It All For You"</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- TERMS INFO SECTION -->
     <section class="clearfix termsInfoSection">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
+                    <h3 style="font-size: 5em;">About Us</h3>
+                    <hr/>
                     <ul class="list-unstyled termsList">
                         <li>
+                            <h3>&nbsp;</h3>
                             <p> Have you ever searched for dormitories in the internet? Have you seen all the different prices there are for the same room? DormBook helps you compare the prices of different dormitories. It will also show the features and even its location. Don't lose time, effort and money, DormBook makes it easy for you to find your ideal dormitories, at the best price and safe!</p>
                         </li>
                         <li>
@@ -41,6 +30,93 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </section>
+
+
+    <!-- PAGE TITLE SECTION -->
+    <section class="clearfix pageTitleSection" style="background-image: url();">
+        <div class="container">
+            <ul class="list-unstyled termsList">
+                <li>
+                    <h3>Researchers</h3>
+                </li>
+            </ul>
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <ul class="list-inline listingsInfo">
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('images/arafel.jpg') }}" alt="Image Listings">
+                            </a>
+                        </li>
+                        <li>
+                            <h3>ARAFEL CHRISS D. SURIAGA</h3>
+                            <h5>469 Luksuhin Ibaba, Alfonso, Cavite</h5>
+                                <span class="category">+63 955 657 3435</span>
+                                <p>suriagaarafel17@gmail.com</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+
+                    <ul class="list-inline listingsInfo">
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('images/shann.jpg') }}" alt="Image Listings">
+                            </a>
+                        </li>
+                        <li>
+                            <h3>SHANNEN N. DIAZ</h3>
+                            <h5>299 R. Magsaysay St. Daine II, Indang, Cavite</h5>
+                                <span class="category">+63 905 743 5888</span>
+                                <p>diazshannen.n@gmail.com</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <ul class="list-inline listingsInfo">
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('images/karen.jpg') }}" alt="Image Listings">
+                            </a>
+                        </li>
+                        <li>
+                            <h3>KAREN B. LACOSTALES</h3>
+                            <h5>Blk 41 Lot 13 Brgy. Anahaw II Bulihan, Silang, Cavite</h5>
+                                <span class="category">+63 935 125 1797</span>
+                                <p>lacostaleskaren17@gmail.com</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-6">
+
+                    <ul class="list-inline listingsInfo">
+                        <li>
+                            <a href="#">
+                                <img src="{{ asset('images/camille.jpg') }}" alt="Image Listings">
+                            </a>
+                        </li>
+                        <li>
+                            <h3>CAMILLE I. HERRERA</h3>
+                            <h5>Tambo Balagbag, Indang, Cavite</h5>
+                                <span class="category">+63 975 509 6507</span>
+                                <p>herreracamille.ch@gmail.com</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <br/>
+            <br/>
+            <br/>
         </div>
     </section>
 

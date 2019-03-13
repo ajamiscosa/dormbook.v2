@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Campus;
 use App\Dorm;
 use App\User;
 use App\Image;
@@ -15,7 +16,7 @@ class DormController extends Controller
 {
     function __construct()
     {
-        $this->middleware('auth')->except('showSearchForm', 'doSearchProcess');
+        $this->middleware('auth')->except('showSearchForm', 'doSearchProcess', 'showDormInformation');
     }
 
     /**
@@ -26,11 +27,11 @@ class DormController extends Controller
     public function index()
     {
         if(auth()->user()->isAdministrator()) {
-            return view('dorms.index');
+            return view('dormlist');
         }
         else {
             $dorm = Dorm::where('Owner','=',auth()->user()->ID)->first();
-            return view('dorms.show', ['data'=>$dorm]);
+            return view('viewdorm', ['data'=>$dorm]);
         }
     }
 
@@ -41,7 +42,7 @@ class DormController extends Controller
      */
     public function showCreateForm()
     {
-        return view('dorms.create');
+        return view('adddorm');
     }
 
     /**
@@ -173,6 +174,12 @@ class DormController extends Controller
             $entry['Address'] = sprintf("%s, %s, %s", $dorm->AddressLine1, $dorm->AddressLine2, $dorm->City);
             $entry['Mobile'] = $dorm->MobileNumber;
             $entry['Rooms'] = $dorm->Rooms;
+            $entry['Rate'] = $dorm->Rate;
+            $entry['City'] = $dorm->City;
+            $entry['Lat2'] = $dorm->Latitude;
+            $entry['Lon2'] = $dorm->Longitude;
+            $entry['Lat1'] = $dorm->getCampus()->Latitude;
+            $entry['Lon1'] = $dorm->getCampus()->Longitude;
 
             array_push($data, $entry);
         }
@@ -190,8 +197,39 @@ class DormController extends Controller
         //
     }
 
-    public function showSearchForm() {
-        return view('search');
+    public function showSearchForm(Request $request) {
+        if(isset($request->search)) {
+            $search = strtolower($request->search);
+            $data = array();
+            $dorms = Dorm::all();
+            if(strlen($search)>0) {
+                foreach($dorms as $dorm) {
+                    if (strpos(strtolower($dorm->AddressLine1), $search) !== false) {
+                        array_push($data, $dorm);
+                    }
+                    else if (strpos(strtolower($dorm->AddressLine2), $search) !== false) {
+                        array_push($data, $dorm);
+                    }
+                    else if (strpos(strtolower($dorm->City), $search) !== false) {
+                        array_push($data, $dorm);
+                    }
+                    else if (strpos(strtolower($dorm->Name), $search) !== false) {
+                        array_push($data, $dorm);
+                    }
+                }
+            }
+            return view('search',['data'=>$data,'search'=>$search]);
+        }
+        else if(isset($request->campus)) {
+            $campus = Campus::where('Campus','=',$request->campus)->first();
+            $dorms = $campus->getDorms();
+
+
+            return view('search',['data'=>$dorms,'search'=>$campus,'campus'=>$campus]);
+        }
+        else {
+            return view('search');
+        }
     }
 
     public function testAmenities(Request $request) {
@@ -249,26 +287,7 @@ class DormController extends Controller
 
     public function doSearchProcess(Request $request)
     {
-        $search = strtolower($request->Search);
-        $data = array();
-        $dorms = Dorm::all();
-        if(strlen($search)>0) {
-            foreach($dorms as $dorm) {
-                if (strpos(strtolower($dorm->AddressLine1), $search) !== false) {
-                    array_push($data, $dorm);
-                }
-                else if (strpos(strtolower($dorm->AddressLine2), $search) !== false) {
-                    array_push($data, $dorm);
-                }
-                else if (strpos(strtolower($dorm->City), $search) !== false) {
-                    array_push($data, $dorm);
-                }
-                else if (strpos(strtolower($dorm->Name), $search) !== false) {
-                    array_push($data, $dorm);
-                }
-            }
-        }
-        return view('search',['data'=>$data,'search'=>$search]);
+
     }
 
     public function meUpload()

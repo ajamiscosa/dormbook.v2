@@ -30,14 +30,23 @@ Route::get('/admin', function(){
 
 Route::get('/login','UserController@showLoginForm')->name('login');
 Route::post('/login','UserController@doLoginProcess');
+Route::get('/logout','UserController@doLogoutProcess');
 
 
 Route::get('/admin/dorm', 'DormController@index');
 
 
 Route::get('/search','DormController@showSearchForm');
-Route::post('/search','DormController@doSearchProcess');
+//Route::get('/search','DormController@doSearchProcess');
 
 Route::get('/view/{id}','DormController@showDormInformation');
 
 Route::post('/dorm/review/store', 'RatingController@store');
+
+Route::get('/dorm','DormController@index');
+Route::get('/dorm/new', 'DormController@showCreateForm');
+Route::get('/dorm/data', 'DormController@getAllDormData');
+
+
+Route::get('/user', 'UserController@index');
+Route::get('/user/data', 'UserController@getAllUserData');

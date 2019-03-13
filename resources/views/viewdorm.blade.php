@@ -3,6 +3,7 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/leaflet.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/leaflet-search.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/lightbox.min.css') }}"/>
 @endsection
 @section('content')
 <section class="clearfix paddingAdjustBottom" id="listing-details">
@@ -22,7 +23,6 @@
                             @endif
                         </ul>
                         <span>( {{ $data->getTotalRatings() }} Reviews )</span>
-                        <a href="dashboard-reviews.html" class="btn btn-primary">Write a review</a>
                     </div>
                 </div>
             </div>
@@ -30,11 +30,17 @@
     </div>
 </section>
 <section class="clearfix paddingAdjustTopBottom">
+    @php
+        $files = \Illuminate\Support\Facades\Storage::disk('public')->allfiles("uploads/{$data->ID}");
+    @endphp
     <ul class="list-inline listingImage">
-        <li><img src="{{ asset("uploads/{$data->ID}/1.jpg") }}" alt="Image Listing" class="img-responsive"></li>
-        <li><img src="{{ asset("uploads/{$data->ID}/2.jpg") }}" alt="Image Listing" class="img-responsive"></li>
-        <li><img src="{{ asset("uploads/{$data->ID}/3.jpg") }}" alt="Image Listing" class="img-responsive"></li>
-        <li><img src="{{ asset("uploads/{$data->ID}/4.jpg") }}" alt="Image Listing" class="img-responsive"></li>
+        @foreach($files as $file)
+            <li>
+                <a href="{{ asset($file) }}" data-lightbox="roadtrip">
+                    <img style="object-fit: cover; width: 100%; max-height: 100px;" src="{{ asset($file) }}" alt="Image Listing" class="img-responsive">
+                </a>
+            </li>
+        @endforeach
     </ul>
 </section>
 <section class="clearfix paddingAdjustTop">
@@ -42,12 +48,12 @@
         <div class="row">
             <div class="col-sm-8 col-xs-12">
                 <div class="listDetailsInfo">
-                    <div class="detailsInfoBox">
-                        <h3>About This Dormitory</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed eiusmod tempor incididunt  labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident. sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. </p>
-                        <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est. </p>
-                        <p>Qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui </p>
-                    </div>
+                    {{--<div class="detailsInfoBox">--}}
+                        {{--<h3>About This Dormitory</h3>--}}
+                        {{--<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed eiusmod tempor incididunt  labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident. sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. </p>--}}
+                        {{--<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est. </p>--}}
+                        {{--<p>Qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui </p>--}}
+                    {{--</div>--}}
                     <div class="detailsInfoBox">
                         <h3>Features</h3>
                         <ul class="list-inline featuresItems">
@@ -252,6 +258,7 @@
 @endsection
 
 @section('scripts')
+    <script src="{{ asset('js/lightbox.min.js') }}"></script>
     <script>
         function add(cls,sno){
 

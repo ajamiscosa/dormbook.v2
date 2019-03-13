@@ -3,6 +3,31 @@
 @section('styles')
     <link rel="stylesheet" href="{{ asset('css/leaflet.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/leaflet-search.css') }}"/>
+    <style>
+        @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: landscape) {
+            html {
+                transform: rotate(-90deg);
+                transform-origin: left top;
+                width: 100vh;
+                overflow-x: hidden;
+                position: absolute;
+                top: 100%;
+                left: 0;
+            }
+        }
+    </style>
+
+
+    <script src="{{ asset('js/leaflet.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/leaflet-search.js') }}" type="text/javascript"></script>
+
+    <script>
+        function getDistance(id,lat1,lon1,lat2,lon2) {
+            var campus = L.latLng(lat1, lon1);
+            var dorm = L.latLng(lat2, lon2);
+            document.getElementById("distance"+id).innerHTML = (campus.distanceTo(dorm)/1000).toFixed(2)+" km away from campus";
+        }
+    </script>
 @endsection
 @section('content')
 
@@ -10,19 +35,18 @@
 <div class="container clearfix">
     <div class="row">
         <div class="col-lg-12">
-            <form method="post" action="/search">
-                {{ csrf_field() }}
+            <form action="/search" method="get">
                 <span class="btn-group btn-panel pb-1">
-                    <button type="submit" class="btn btn-primary" name="Search" value="Indang">Indang</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Carmona">Carmona</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Trece Martirez">Trece Martirez</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Imus">Imus</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Rosario">Rosario</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Cavite City">Cavite City</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Tanza">Tanza</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="General Trias">Gen. Trias</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Silang">Silang</button>
-                    <button type="submit" class="btn btn-primary" name="Search" value="Bacoor">Bacoor</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Indang">Indang</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Carmona">Carmona</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Trece Martirez">Trece Martirez</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Imus">Imus</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Rosario">Rosario</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Cavite City">Cavite City</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Tanza">Tanza</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="General Trias">Gen. Trias</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Silang">Silang</button>
+                    <button type="submit" class="btn btn-primary" name="campus" value="Bacoor">Bacoor</button>
                 </span>
             </form>
         </div>
@@ -32,13 +56,11 @@
             <div class="row">
 
                 <div class="text-center">
-                    <h1>WE FOUND IT ALL FOR YOU!</h1>
-                    <form action="/search" method="post">
-                        {{ csrf_field() }}
+                    <form action="/search" method="get">
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-group ">
-                                    <input type="text" class="form-control" name="Search" placeholder="What are you looking for?">
+                                    <input type="text" class="form-control" name="search" placeholder="What are you looking for?">
                                 </div>
                             </div>
                         </div>
@@ -94,10 +116,13 @@
                                                 $path = explode(' ',$entry->Name);
                                                 $path = implode('-',$path);
                                                 $path = sprintf("%s-%s",$entry->ID,$path);
+                                                $campus = $entry->getCampus();
                                             @endphp
                                             <h2><a href="/view/{{ $path }}" style="color: #222222">{{ $entry->Name }}</a> <span class="likeCount"><i class="fa fa-heart-o" aria-hidden="true"></i> {{ $entry->getTotalRatings() }}</span></h2>
                                             <p>{{ $entry->AddressLine1 }}, {{ $entry->AddressLine2 }}, <span class="placeName"> {{ $entry->City }}</span></p>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed eiusmod tempor incididunt  labore et dolore magna aliqua. </p>
+                                            <p id="distance{{ $entry->ID }}">
+                                                <script>getDistance('{{ $entry->ID }}','{{ $campus->Latitude }}','{{ $campus->Longitude }}','{{ $entry->Latitude }}','{{ $entry->Longitude }}')</script>
+                                            </p>
                                             <ul class="list-inline list-tag">
                                                 <li><a href="/">{{ $entry->Rate }}</a></li>
                                             </ul>
@@ -105,6 +130,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <script>
+                                getDistance('{{ $entry->Latitude }}', '{{ $entry->Longitude }}','{{ $entry->Latitude }}', '{{ $entry->Longitude }}')
+                            </script>
                         @endforeach
                     </div>
                 </div>
@@ -114,12 +142,13 @@
 @endsection
 
 @section('scripts')
-
-    <script src="{{ asset('js/leaflet.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/leaflet-search.js') }}" type="text/javascript"></script>
     <script>
 
-        var mymap = new L.map('mapid').setView([14.194331, 120.876732], 14);
+        @if(isset($campus))
+            var mymap = new L.map('mapid').setView([{{ $campus->Latitude }}, {{ $campus->Longitude }}], 14);
+        @else
+            mymap = new L.map('mapid').setView([14.194331, 120.876732], 14);
+        @endif
 
         new L.Control.Search({
             url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',

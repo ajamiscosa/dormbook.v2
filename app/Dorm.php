@@ -40,7 +40,8 @@ class Dorm extends Model
         'Owner',
         'BusinessPermit',
         'BusinessPermitImage',
-        'Amenities'
+        'Amenities',
+        'Campus'
     ];
 
     public function getOwner() {
@@ -108,5 +109,10 @@ class Dorm extends Model
     public function getRatings()
     {
         return $this->hasMany('App\Rating','Dorm','ID')->get();
+    }
+
+    public function getCampus()
+    {
+        return $this->belongsTo('App\Campus','Campus','ID')->first();
     }
 }

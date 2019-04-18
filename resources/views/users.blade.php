@@ -44,7 +44,7 @@
                             </ul>
                         </li>
                         <li class="">
-                            <a href="/user"><i class="fa fa-user icon-dash" aria-hidden="true"></i> Users</a>
+                            <a href="/owners"><i class="fa fa-user icon-dash" aria-hidden="true"></i> Owners</a>
                         </li>
                     </ul>
                     <div class="row adjustRow">
@@ -68,10 +68,10 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="dashboardPageTitle">
-                        <h2>Users</h2>
+                        <h2>Owners</h2>
                     </div>
                     <div class="table-responsive" data-pattern="priority-columns">
-                        <table class="table listingsTable" id="usersTable">
+                        <table class="table listingsTable" id="OwnersTable">
                             <thead>
                             <tr class="rowItem">
                                 <th data-priority=""><b>Name</b></th>
@@ -97,11 +97,11 @@
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap4.js') }}"></script>
     <script>
-        $('#usersTable').DataTable( {
+        $('#OwnersTable').DataTable( {
             serverSide: false,
             processing: true,
             searching: true,
-            ajax: '/user/data',
+            ajax: '/owners/data',
             dataSrc: 'data',
             columns: [
                 { data:"Name" },

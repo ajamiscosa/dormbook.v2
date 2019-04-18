@@ -23,7 +23,11 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class=""><a href="/">home</a></li>
                         <li class=""><a href="/about">about us</a></li>
+                        @if(auth()->user())
+                            <li class=""><a href="/admin">{{ auth()->user()->Username }}</a></li>
+                        @else
                         <li class=""><a href="/admin">admin</a></li>
+                        @endif
                     </ul>
                 </div>
             </div>

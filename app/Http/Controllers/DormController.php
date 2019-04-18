@@ -11,6 +11,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class DormController extends Controller
 {
@@ -26,12 +27,15 @@ class DormController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->isAdministrator()) {
+		if(auth()->check() && !auth()->user()->isAdministrator()) {
+            $dorm = Dorm::where('Owner','=',auth()->user()->ID)->first();
+            return view('viewdorm', ['data'=>$dorm,'usermode'=>true]);
+		}
+		else if(auth()->user()->isAdministrator()) {
             return view('dormlist');
         }
         else {
-            $dorm = Dorm::where('Owner','=',auth()->user()->ID)->first();
-            return view('viewdorm', ['data'=>$dorm]);
+			return view('viewdorm');
         }
     }
 
@@ -53,37 +57,40 @@ class DormController extends Controller
      */
     public function doSaveProcess(Request $request)
     {
-        $user = new User();
-        $user->Username = User::GenerateUsernameForDormitoryUser($request->Name);
-        $user->Password = "1234";
-        $user->EmailAddress = "default@email.com";
-        $user->Name = $request->Owner;
-        $user->save();
+		
+		DB::transaction(function () use($request) {
+			$user = new User();
+			$user->Username = User::GenerateUsernameForDormitoryUser($request->Name);
+			$user->Password = "1234";
+			$user->EmailAddress = "default@email.com";
+			$user->Name = $request->Owner;
+			$user->save();
 
-        $temp = json_decode('['.implode(',',$request->Amenities).']',true);
-        $amenities = json_encode($temp);
+			$temp = json_decode('['.implode(',',$request->Amenities).']',true);
+			$amenities = json_encode($temp);
 
-        $dorm = new Dorm();
-        $dorm->Name = $request->Name;
-        $dorm->Owner = $user->ID;
-        $dorm->AddressLine1 = $request->AddressLine1;
-        $dorm->AddressLine2 = $request->AddressLine2;
-        $dorm->City = $request->City;
-        $dorm->Zip = $request->Zip;
-        $dorm->Rate = $request->Rate;
-        $dorm->Rooms = $request->Rooms;
-        $dorm->MobileNumber = $request->MobileNumber;
-        $dorm->LandLineNumber = $request->LandLineNumber;
-        $dorm->BusinessPermit = $request->BusinessPermit;
-        $dorm->Latitude = $request->Latitude;
-        $dorm->Longitude = $request->Longitude;
-        $dorm->Amenities = $amenities;
-        $dorm->save();
+			$dorm = new Dorm();
+			$dorm->Name = $request->Name;
+			$dorm->Owner = $user->ID;
+			$dorm->Campus = $request->Campus;
+			$dorm->AddressLine1 = $request->AddressLine1;
+			$dorm->AddressLine2 = $request->AddressLine2;
+			$dorm->City = $request->City;
+			$dorm->Zip = $request->Zip;
+			$dorm->Rate = $request->Rate;
+			$dorm->Rooms = $request->Rooms;
+			$dorm->MobileNumber = $request->MobileNumber;
+			$dorm->LandLineNumber = $request->LandLineNumber;
+			$dorm->BusinessPermit = $request->BusinessPermit;
+			$dorm->Latitude = $request->Latitude;
+			$dorm->Longitude = $request->Longitude;
+			$dorm->Amenities = $amenities;
+			$dorm->save();
 
-        $this->validate($request, [
-        'filename' => 'required',
-        'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+			File::makeDirectory(public_path()."/uploads/".$dorm->ID);
+		});
+
+        
 
         return redirect()->to('/dorm');
     }
@@ -113,7 +120,7 @@ class DormController extends Controller
         $temp = explode('-',$Dorm);
         $dorm = new Dorm();
         $dorm = $dorm->where('ID','=',$temp[0])->first();
-        return view('dorms.update', ['data'=>$dorm]);
+        return view('updatedorm', ['data'=>$dorm]);
     }
 
     /**
@@ -128,6 +135,8 @@ class DormController extends Controller
         $temp = json_decode('['.implode(',',$request->Amenities).']',true);
         $amenities = json_encode($temp);
 
+
+		$dorm->Name = $request->Name;
         $dorm->AddressLine1 = $request->AddressLine1;
         $dorm->AddressLine2 = $request->AddressLine2;
         $dorm->City = $request->City;
@@ -141,6 +150,26 @@ class DormController extends Controller
         $dorm->Longitude = $request->Longitude;
         $dorm->Amenities = $amenities;
         $dorm->save();
+
+
+
+        $this->validate($request, [
+            'filename' => 'required',
+            'filename.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        if($request->hasfile('filename'))
+         {
+
+            foreach($request->file('filename') as $image)
+            {
+                $name=$image->getClientOriginalName();
+                $count = count(File::allFiles(public_path()."/uploads/".$dorm->ID));
+                $count++;
+                $image->move(public_path().'/uploads/'.$dorm->ID.'/', $count.".".$image->getClientOriginalExtension());
+                $data[] = $name;
+            }
+         }
 
         return redirect()->to('/dorm');
     }
@@ -260,8 +289,8 @@ class DormController extends Controller
             foreach($request->file('Images') as $image)
             {
                 $name=$image->getClientOriginalName();
-                $image->move(public_path().'/images/', $name);  
-                $data[] = $name;  
+                $image->move(public_path().'/images/', $name);
+                $data[] = $name;
             }
          }
 
@@ -270,7 +299,7 @@ class DormController extends Controller
          $image->Type='j';
          $image->ReferenceID=1;
          // dd($image->Path);
-        
+
         $image->save();
         return back()->with('success', 'Your images has been successfully');
 
@@ -315,7 +344,7 @@ class DormController extends Controller
                 $count = count(File::allFiles(public_path()."/uploads/2"));
                 $count++;
                 $image->move(public_path().'/uploads/'.$dorm.'/', $count.".".$image->getClientOriginalExtension());
-                $data[] = $name;  
+                $data[] = $name;
             }
          }
 
@@ -324,7 +353,7 @@ class DormController extends Controller
          $image->Type='j';
          $image->ReferenceID=1;
          // dd($image->Path);
-        
+
         $image->save();
 
         return back()->with('success', 'Your images has been successfully');
@@ -332,9 +361,9 @@ class DormController extends Controller
 
     public function ajaxData(Request $request)
     {
-        $query = $request->get('query','');        
+        $query = $request->get('query','');
 
-        $posts = Dorm::where('Name','LIKE','%'.$query.'%')->get();        
+        $posts = Dorm::where('Name','LIKE','%'.$query.'%')->get();
 
         return response()->json($posts);
     }

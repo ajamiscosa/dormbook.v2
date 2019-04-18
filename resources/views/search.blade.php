@@ -95,11 +95,19 @@
                         </div>
 
                         @foreach($data as $entry)
+							@php
+								$files = File::allFiles(public_path()."/uploads/".$entry->ID);
+								try{ 
+									$path = $files[0]->getBasename();
+								}catch(\Exception $exc ) {
+									$path = "1.jpg";
+								}
+							@endphp
                             <div class="listContent">
                                 <div class="row">
                                     <div class="col-sm-5 col-xs-12">
                                         <div class="categoryImage">
-                                            <img src="{{ asset("uploads/{$entry->ID}/1.jpg") }}" alt="Image category" class="img-responsive img-rounded">
+                                            <img src="{{ asset("uploads/{$entry->ID}/{$path}") }}" alt="Image category" class="img-responsive img-rounded">
                                         </div>
                                     </div>
                                     <div class="col-sm-7 col-xs-12">
@@ -121,7 +129,9 @@
                                             <h2><a href="/view/{{ $path }}" style="color: #222222">{{ $entry->Name }}</a> <span class="likeCount"><i class="fa fa-heart-o" aria-hidden="true"></i> {{ $entry->getTotalRatings() }}</span></h2>
                                             <p>{{ $entry->AddressLine1 }}, {{ $entry->AddressLine2 }}, <span class="placeName"> {{ $entry->City }}</span></p>
                                             <p id="distance{{ $entry->ID }}">
-                                                <script>getDistance('{{ $entry->ID }}','{{ $campus->Latitude }}','{{ $campus->Longitude }}','{{ $entry->Latitude }}','{{ $entry->Longitude }}')</script>
+                                                <script>
+                                                    getDistance('{{ $entry->ID }}','{{ $campus->Latitude }}','{{ $campus->Longitude }}','{{ $entry->Latitude }}','{{ $entry->Longitude }}')
+                                                </script>
                                             </p>
                                             <ul class="list-inline list-tag">
                                                 <li><a href="/">{{ $entry->Rate }}</a></li>
@@ -130,9 +140,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <script>
-                                getDistance('{{ $entry->Latitude }}', '{{ $entry->Longitude }}','{{ $entry->Latitude }}', '{{ $entry->Longitude }}')
-                            </script>
                         @endforeach
                     </div>
                 </div>

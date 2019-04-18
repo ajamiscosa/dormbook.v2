@@ -46,7 +46,15 @@ Route::post('/dorm/review/store', 'RatingController@store');
 Route::get('/dorm','DormController@index');
 Route::get('/dorm/new', 'DormController@showCreateForm');
 Route::get('/dorm/data', 'DormController@getAllDormData');
+Route::post('/dorm/store', 'DormController@doSaveProcess');
+Route::get('/dorm/update/{dormname}', 'DormController@showUpdateForm');
+Route::post('/dorm/{dorm}/update', 'DormController@doUpdateProcess');
 
 
-Route::get('/user', 'UserController@index');
-Route::get('/user/data', 'UserController@getAllUserData');
+Route::get('/owners', 'UserController@index');
+Route::get('/owners/data', 'UserController@getAllUserData');
+
+
+Route::get('/test', function(){
+    return view('test');
+});

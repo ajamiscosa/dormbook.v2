@@ -12,8 +12,8 @@
                         </a>
                         <p>DormBook is a friendly website for CvSUeños which provides you a list of dormitories around Cavite State University.</p>
                         <ul class="list-styled list-contact">
-                            <li><i class="fa fa-phone" aria-hidden="true"></i>[046] 415 0010</li>
-                            <li><i class="fa fa-envelope" aria-hidden="true"></i><a href="https://themes.iamabdus.com/listty/1.4/index-4.html#">info@listy.com</a></li>
+                            <li><i class="fa fa-phone" aria-hidden="true"></i>(046) 8620-290/ (046) 4150-013 loc 221</li>
+                            <li><i class="fa fa-envelope" aria-hidden="true"></i><a href="https://www.cvsu.edu.ph">www.cvsu.edu.ph</a></li>
                         </ul>
                     </div>
                 </div>
@@ -39,13 +39,15 @@
                 <div class="col-xs-12">
                     <div class="copyRightWrapper">
                         <div class="row">
-                            <div class="col-sm-5 col-sm-push-7 col-xs-12">
-                                <ul class="list-inline socialLink">
-                                    <li><a href="https://themes.iamabdus.com/listty/1.4/index-4.html#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                                    <li><a href="https://themes.iamabdus.com/listty/1.4/index-4.html#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                                    <li><a href="https://themes.iamabdus.com/listty/1.4/index-4.html#"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a></li>
-                                    <li><a href="https://themes.iamabdus.com/listty/1.4/index-4.html#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-                                </ul>
+                            <div class="col-sm-5 col-sm-push-7 col-xs-12 text-right">
+                                <a href="http://www.hitwebcounter.com" target="_blank">
+                                    <img src="http://hitwebcounter.com/counter/counter.php?page=7047862&style=0038&nbdigits=5&type=page&initCount=0" title="Hit Web Stats" Alt="Hit Web Stats"   border="0" >
+                                </a>
+                                <br/>
+                                <a href="http://www.hitwebcounter.com" title=""
+                                    target="_blank" style="font-family: ;
+                                    font-size: px; color: #; text-decoration:  ;">                                       </>
+                                </a>
                             </div>
                             <div class="col-sm-7 col-sm-pull-5 col-xs-12">
                                 <div class="copyRightText">

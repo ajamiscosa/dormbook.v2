@@ -9,12 +9,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="content text-center">
-                            <h1 style="color: white;">&nbsp;</h1>
-                            <p>Trouble looking for dorm? Hassle from seaching? DormBook got you!
-                                Dormbook helps you compare the prices of different dormitories. It will also show the features, amenities and even its location.
-                                Don't lose time, effort and money!
-                                Let dormbook do the work!
-                                It makes it easy for you to find your ideal dormitories, at the best price and safe.</p>
+                            <h1 style="color: white;">LOOKING FOR THE PERFECT DORM FOR YOU?</h1>
+                            <p>DormBook got you!</p>
                             <a href="/search" class="btn btn-primary">Explore Dorms</a>
                         </div>
                     </div>

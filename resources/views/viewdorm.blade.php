@@ -4,6 +4,10 @@
     <link rel="stylesheet" href="{{ asset('css/leaflet.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/leaflet-search.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/lightbox.min.css') }}"/>
+
+    <script src="{{ asset('js/leaflet.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/leaflet-search.js') }}" type="text/javascript"></script>
+
 @endsection
 @section('content')
 <section class="clearfix paddingAdjustBottom" id="listing-details">
@@ -11,8 +15,9 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="listingTitleArea">
-                    <h2>{{ $data->Name }}</h2>
+                    <h2>{{ $data->Name }}</h2><h4>{{ $data->Rate }} / head</h4>
                     <p>{{ $data->AddressLine1 }}, {{ $data->AddressLine2 }}, <br>{{ $data->City }}, Cavite</p>
+                    <h5 id="distance">&nbsp;</h5>
                     <div class="listingReview">
                         <ul class="list-inline rating rating-review">
                             @for($i=0;$i<floor($data->getOverallAverageRating());$i++)
@@ -25,9 +30,25 @@
                         <span>( {{ $data->getTotalRatings() }} Reviews )</span>
                     </div>
                 </div>
+                @php
+                    $name = implode('-',explode(' ',$data->Name));
+                @endphp
+                @if((isset($usermode) && $usermode) or (auth()->user() && auth()->user()->isAdministrator()))
+                <br/>
+                <br/>
+                <br/>
+                    <a href="/dorm/update/{{$data->ID}}-{{$name}}" class='btn btn-primary btn-block btn-sm'>Update</a>
+                @endif
             </div>
         </div>
     </div>
+
+    <script>
+        var campus = L.latLng('{{ $data->getCampus()->Latitude }}', '{{ $data->getCampus()->Longitude }}');
+        var dorm = L.latLng('{{ $data->Latitude }}', '{{ $data->Longitude }}');
+        document.getElementById("distance").innerHTML = (campus.distanceTo(dorm)/1000).toFixed(2)+" km away from campus";
+    </script>
+
 </section>
 <section class="clearfix paddingAdjustTopBottom">
     @php
@@ -147,6 +168,7 @@
                         </div>
                         @endforeach
                     </div>
+                    @if(!isset($usermode))
                     <div class="detailsInfoBox">
                         <h3>Write A Review </h3>
                         <span>( {{ $data->getTotalRatings() }} Reviews )</span>
@@ -216,7 +238,7 @@
 
                             <div class="formSection formSpace">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="Name" placeholder="Name"></input>
+                                    <input type="text" class="form-control" name="Name" placeholder="Name" required></input>
                                 </div>
                                 <div class="form-group">
                                     <textarea class="form-control" rows="3" name="Comment" placeholder="Comment"></textarea>
@@ -227,6 +249,7 @@
                             </div>
                         </form>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="col-sm-4 col-xs-12" id="mapdiv">
@@ -246,6 +269,17 @@
                             <li>
                                 <i class="fa fa-phone" aria-hidden="true"></i>
                                 {{ $data->LandLineNumber }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="listSidebar">
+                    <h3>Rooms</h3>
+                    <div class="contactInfo">
+                        <ul class="list-unstyled list-address">
+                            <li>
+                                <i class="fa fa-home" aria-hidden="true"></i>
+                                {{ $data->Rooms }} rooms
                             </li>
                         </ul>
                     </div>
@@ -279,8 +313,7 @@
             $('#'+cls).val(sno);
         }
     </script>
-    <script src="{{ asset('js/leaflet.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/leaflet-search.js') }}" type="text/javascript"></script>
+
     <script>
 
         var mymap = new L.map('mapid').setView([{{$data->Latitude}}, {{$data->Longitude}}], 14);

@@ -10,7 +10,11 @@
                     <ul class="list-unstyled termsList">
                         <li>
                             <h3>&nbsp;</h3>
-                            <p> Have you ever searched for dormitories in the internet? Have you seen all the different prices there are for the same room? DormBook helps you compare the prices of different dormitories. It will also show the features and even its location. Don't lose time, effort and money, DormBook makes it easy for you to find your ideal dormitories, at the best price and safe!</p>
+                            <p style="font-size: 22px;"> Trouble looking for dorm? Hassle from seaching? DormBook got you!
+                                Dormbook helps you compare the prices of different dormitories. It will also show the features, amenities and even its location.
+                                Don't lose time, effort and money!
+                                Let dormbook do the work!
+                                It makes it easy for you to find your ideal dormitories, at the best price and safe.</p>
                         </li>
                         <li>
                             <h3>CvSU Mission</h3>

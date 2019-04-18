@@ -31,7 +31,7 @@
                             </ul>
                         </li>
                         <li class="">
-                            <a href="/user"><i class="fa fa-user icon-dash" aria-hidden="true"></i> Users</a>
+                            <a href="/owners"><i class="fa fa-user icon-dash" aria-hidden="true"></i> Owners</a>
                         </li>
                         <li class="text-right">
                             <a href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a>

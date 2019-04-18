@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Rating;
 
 class DormController extends Controller
 {
@@ -57,7 +58,7 @@ class DormController extends Controller
      */
     public function doSaveProcess(Request $request)
     {
-		
+
 		DB::transaction(function () use($request) {
 			$user = new User();
 			$user->Username = User::GenerateUsernameForDormitoryUser($request->Name);
@@ -90,7 +91,7 @@ class DormController extends Controller
 			File::makeDirectory(public_path()."/uploads/".$dorm->ID);
 		});
 
-        
+
 
         return redirect()->to('/dorm');
     }
@@ -221,9 +222,11 @@ class DormController extends Controller
      * @param  \App\Dorm  $dorm
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dorm $dorm)
+    public function destroy(Request $request)
     {
-        //
+        $dorm = Dorm::find($request->id);
+        $dorm->forceDelete();
+        return response()->json('success');
     }
 
     public function showSearchForm(Request $request) {
@@ -366,5 +369,11 @@ class DormController extends Controller
         $posts = Dorm::where('Name','LIKE','%'.$query.'%')->get();
 
         return response()->json($posts);
+    }
+
+    public function deleteReview(Request $request) {
+        $review = Rating::find($request->id);
+        $review->forceDelete();
+        return response()->json('success');
     }
 }

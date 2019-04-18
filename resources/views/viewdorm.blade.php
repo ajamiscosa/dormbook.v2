@@ -82,8 +82,13 @@
                                 $amenities = json_decode($data->Amenities);
                             @endphp
                             @foreach(\App\Facility::all() as $facility)
-                                <li><i class="fa {{ in_array($facility->ID, $amenities, true)?"fa-check-circle-o":"fa-times-circle" }} " aria-hidden="true"></i> <span style="{{ in_array($facility->ID, $amenities, true)?"":"text-decoration: line-through;" }}">{{ $facility->Description }}</span> </li>
+                                @if(in_array($facility->ID, $amenities, true))
+                                <li>
+                                    <i class="fa {{ in_array($facility->ID, $amenities, true)?"fa-check-circle-o":"fa-times-circle" }} " aria-hidden="true"></i>
+                                    <span style="{{ in_array($facility->ID, $amenities, true)?"":"text-decoration: line-through;" }}">{{ $facility->Description }}</span>
+                                </li>
                                 <br/>
+                                @endif
                             @endforeach
 
                         </ul>
@@ -161,7 +166,11 @@
                         @foreach($data->getRatings() as $rating)
                         <div class="media media-comment">
                             <div class="media-body">
-                                <h1 class="media-heading"><strong>{{ $rating->Name }}</strong></h1>
+                                <h1 class="media-heading"><strong>{{ $rating->Name }}</strong>
+                                    @if(auth()->check() && auth()->user()->isAdministrator())
+                                        <a role="button" rel="{{ $rating->ID }}" class="btnDelete">&nbsp;<i class="fa fa-trash"></i> Delete&nbsp;</a>
+                                    @endif
+                                </h1>
                                 <h5 class="media-heading">{{ \Carbon\Carbon::parse($rating->created_at)->format('F Y') }}</h5>
                                 <p>{{ $rating->Message }}</p>
                             </div>
@@ -312,6 +321,23 @@
 
             $('#'+cls).val(sno);
         }
+
+        $('.btnDelete').on('click', function(){
+            var reviewid = $(this).attr('rel');
+            if(confirm('Do you really want to delete this rating?')) {
+                $.ajax({
+                    method: 'POST',
+                    url: "/review/delete",
+                    data: { id: reviewid },
+                    success: function(x) {
+                        if(x=="success"){
+                            alert('Successfully deleted rating.');
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        });
     </script>
 
     <script>

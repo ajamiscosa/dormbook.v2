@@ -49,6 +49,8 @@ Route::get('/dorm/data', 'DormController@getAllDormData');
 Route::post('/dorm/store', 'DormController@doSaveProcess');
 Route::get('/dorm/update/{dormname}', 'DormController@showUpdateForm');
 Route::post('/dorm/{dorm}/update', 'DormController@doUpdateProcess');
+Route::get('/dorm/delete', 'DormController@destroy');
+
 
 
 Route::get('/owners', 'UserController@index');
@@ -58,3 +60,5 @@ Route::get('/owners/data', 'UserController@getAllUserData');
 Route::get('/test', function(){
     return view('test');
 });
+
+Route::post('/review/delete', 'DormController@deleteReview');

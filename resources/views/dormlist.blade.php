@@ -130,8 +130,8 @@
                     render: function (data, type, row) {
                         var ID = row['ID'];
                         var Name = row['Name'].split(' ').join('-');
-                        return '<a href="/dorm/update/'+ID+'-'+Name+'" class="btn btn-warning btn-link btn-icon btn-sm edit"><i class="fa fa-edit"></i></a>' +
-                            '<a href="/dorm/delete/'+ID+'-'+Name+'" class="btn btn-danger btn-link btn-icon btn-sm remove"><i class="fa fa-times"></i></a>';
+                        return '<a href="/dorm/update/'+ID+'-'+Name+'" class="" style="font-size: 2em;"><i class="fa fa-edit"></i></a>&nbsp;&nbsp;' +
+                            '<a role="button" class="btnDeleteDorm" onclick="deleteDorm('+ID+');" style="font-size: 2em;" rel="'+ID+'"><i class="fa fa-trash"></i></a>';
                     },
                     targets: 5
                 }
@@ -145,5 +145,22 @@
                 infoFiltered: ""
             }
         } );
+    </script>
+    <script>
+        function deleteDorm(dormid){
+            if(confirm('Do you really want to delete this dormitory listing?')) {
+                $.ajax({
+                    method: 'GET',
+                    url: "/dorm/delete",
+                    data: { id: dormid },
+                    success: function(x) {
+                        if(x=="success"){
+                            alert('Successfully deleted dormitory listing.');
+                            location.reload();
+                        }
+                    }
+                });
+            }
+        }
     </script>
 @endsection
